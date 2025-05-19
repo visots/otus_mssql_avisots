@@ -137,6 +137,6 @@ order by OrderDate desc
 
 select distinct c.CustomerName,c.PhoneNumber
 from [Sales].[Orders] o
-join [Sales].[OrderLines] ol on o.OrderID = o.OrderID
+join [Sales].[OrderLines] ol on o.OrderID = ol.OrderID
 join [Sales].[Customers] c on c.CustomerID = o.CustomerID
 join [Warehouse].[StockItems] s on s.StockItemID = ol.StockItemID  and s.StockItemName = 'Chocolate frogs 250g'
