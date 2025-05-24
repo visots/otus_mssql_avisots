@@ -30,7 +30,15 @@ USE WideWorldImporters
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+SELECT 
+	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
+	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
+	AVG(il.UnitPrice ) as AvgUnitPrice,
+	SUM(il.ExtendedPrice) as TotalPricePerMonth
+FROM Sales.Invoices i 
+JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID 
+GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM')
+ORDER BY SaleYear, SaleMonth ASC
 
 /*
 2. Отобразить все месяцы, где общая сумма продаж превысила 4 600 000
@@ -43,7 +51,15 @@ USE WideWorldImporters
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+SELECT 
+	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
+	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
+	SUM(il.ExtendedPrice)
+FROM Sales.Invoices i 
+JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
+GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM')
+HAVING  SUM(il.ExtendedPrice) > 4600000
+ORDER BY SaleYear, SaleMonth ASC
 
 /*
 3. Вывести сумму продаж, дату первой продажи
@@ -62,7 +78,20 @@ USE WideWorldImporters
 Продажи смотреть в таблице Sales.Invoices и связанных таблицах.
 */
 
-напишите здесь свое решение
+
+SELECT 
+	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
+	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
+	il.Description,
+	SUM(il.ExtendedPrice) as PriceSum,
+	MIN(i.InvoiceDate) as FirstSale,
+	COUNT(il.InvoiceLineID) as SoldCount
+FROM Sales.Invoices i  
+JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
+GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM'),il.Description
+HAVING  COUNT(il.InvoiceLineID) < 50
+ORDER BY SaleYear,SaleMonth 
+
 
 -- ---------------------------------------------------------------------------
 -- Опционально
@@ -71,3 +100,4 @@ USE WideWorldImporters
 Написать запросы 2-3 так, чтобы если в каком-то месяце не было продаж,
 то этот месяц также отображался бы в результатах, но там были нули.
 */
+--Полагаю, что нужно сначала создать отсутствующие месяцы, потом заджойнить с ними таблицу продаж...
