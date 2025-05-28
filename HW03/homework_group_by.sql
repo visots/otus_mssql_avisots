@@ -34,7 +34,7 @@ SELECT
 	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
 	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
 	AVG(il.UnitPrice ) as AvgUnitPrice,
-	SUM(il.ExtendedPrice) as TotalPricePerMonth
+	SUM(il.Quantity* il.UnitPrice) as TotalPricePerMonth
 FROM Sales.Invoices i 
 JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID 
 GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM')
@@ -54,7 +54,7 @@ ORDER BY SaleYear, SaleMonth ASC
 SELECT 
 	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
 	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
-	SUM(il.ExtendedPrice)
+	SUM(il.Quantity* il.UnitPrice)
 FROM Sales.Invoices i 
 JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
 GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM')
@@ -85,7 +85,7 @@ SELECT
 	il.Description,
 	SUM(il.ExtendedPrice) as PriceSum,
 	MIN(i.InvoiceDate) as FirstSale,
-	COUNT(il.InvoiceLineID) as SoldCount
+	SUM(il.InvoiceLineID) as SoldCount
 FROM Sales.Invoices i  
 JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
 GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM'),il.Description
