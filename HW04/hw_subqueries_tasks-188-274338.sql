@@ -57,8 +57,25 @@ WHERE p.IsSalesperson = 1 and i.SalespersonPersonID IS NULL
 2. Выберите товары с минимальной ценой (подзапросом). Сделайте два варианта подзапроса. 
 Вывести: ИД товара, наименование товара, цена.
 */
+SELECT [StockItemId], 
+	   [StockItemName],
+	   (SELECT MIN(UnitPrice) FROM [Warehouse].[StockItems])
+FROM [Warehouse].[StockItems]
 
-TODO: напишите здесь свое решение
+SELECT [StockItemId], 
+	   [StockItemName],
+	   [UnitPrice]
+FROM [Warehouse].[StockItems] 
+WHERE StockItemID IN ( 
+						SELECT [StockItemId] 
+						FROM [Warehouse].[StockItems] 
+						GROUP BY [StockItemId]
+						HAVING MIN(UnitPrice) IS NOT NULL)
+
+
+--Проверка 
+--SELECT [StockItemId],[StockItemName],MIN(UnitPrice)FROM [Warehouse].[StockItems]
+--GROUP BY [StockItemId],[StockItemName]
 
 /*
 3. Выберите информацию по клиентам, которые перевели компании пять максимальных платежей 
