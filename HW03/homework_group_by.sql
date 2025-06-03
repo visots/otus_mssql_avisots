@@ -58,7 +58,7 @@ SELECT
 FROM Sales.Invoices i 
 JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
 GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM')
-HAVING  SUM(il.ExtendedPrice) > 4600000
+HAVING  SUM(il.Quantity* il.UnitPrice) > 4600000
 ORDER BY SaleYear, SaleMonth ASC
 
 /*
@@ -83,13 +83,13 @@ SELECT
 	FORMAT(i.InvoiceDate, 'yyyy') as SaleYear,
 	FORMAT(i.InvoiceDate, 'MM') as SaleMonth,
 	il.Description,
-	SUM(il.ExtendedPrice) as PriceSum,
+	SUM(il.Quantity* il.UnitPrice) as PriceSum,
 	MIN(i.InvoiceDate) as FirstSale,
 	SUM(il.InvoiceLineID) as SoldCount
 FROM Sales.Invoices i  
 JOIN Sales.InvoiceLines il on il.InvoiceId = i.InvoiceID
 GROUP BY FORMAT(i.InvoiceDate, 'yyyy'),FORMAT(i.InvoiceDate, 'MM'),il.Description
-HAVING  COUNT(il.InvoiceLineID) < 50
+HAVING  SUM(il.InvoiceLineID) < 50
 ORDER BY SaleYear,SaleMonth 
 
 
