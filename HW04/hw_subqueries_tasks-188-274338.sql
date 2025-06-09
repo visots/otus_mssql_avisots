@@ -83,7 +83,17 @@ WHERE StockItemID IN (
 Представьте несколько способов (в том числе с CTE). 
 */
 
-TODO: напишите здесь свое решение
+select ct.CustomerID, c.CustomerName 
+from [Sales].[CustomerTransactions] ct
+join [Sales].[Customers] c on c.CustomerID = ct.CustomerID
+where CustomerTransactionID in
+		(select  top 5 CustomerTransactionID from [Sales].[CustomerTransactions]
+		order by TransactionAmount desc)
+
+select t.CustomerID, c.CustomerName 
+from  (select  top 5 CustomerTransactionID, CustomerID from [Sales].[CustomerTransactions]
+		order by TransactionAmount desc) as t
+join [Sales].[Customers] c on c.CustomerID = t.CustomerID
 
 /*
 4. Выберите города (ид и название), в которые были доставлены товары, 
