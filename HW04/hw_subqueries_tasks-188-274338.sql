@@ -112,7 +112,20 @@ join cte  on cte.CustomerID=c.CustomerID
 который осуществлял упаковку заказов (PackedByPersonID).
 */
 
-
+; with Top3PriceItemOrders as (
+ select distinct OrderID from [Sales].[OrderLines]
+ where StockItemID in ( select top 3 StockItemID
+					    from [Warehouse].[StockItems] 
+					    order by UnitPrice desc
+					  )
+ )
+ SELECT distinct ct.CityID, ct.CityName, p.FullName
+  FROM [WideWorldImporters].[Sales].[Orders] o
+  join [Sales].[Customers] c on c.CustomerID = o.CustomerID
+  join [Application].[People] p on p.PersonID = o.PickedByPersonID
+  join [Application].[Cities] ct on ct.CityId = c.DeliveryCityId
+  join Top3PriceItemOrders t on t.OrderID =o.OrderID
+  where o.PickedByPersonID is not null
 
 -- ---------------------------------------------------------------------------
 -- Опциональное задание
