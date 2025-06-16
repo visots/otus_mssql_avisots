@@ -95,13 +95,24 @@ from  (select  top 5 CustomerTransactionID, CustomerID from [Sales].[CustomerTra
 		order by TransactionAmount desc) as t
 join [Sales].[Customers] c on c.CustomerID = t.CustomerID
 
+;with cte as (
+	select  top 5 CustomerTransactionID, CustomerID 
+	from [Sales].[CustomerTransactions]	
+	order by TransactionAmount desc
+)
+select c.CustomerID, c.CustomerName 
+from [Sales].[Customers] c
+join cte  on cte.CustomerID=c.CustomerID
+
+
+
 /*
 4. Выберите города (ид и название), в которые были доставлены товары, 
 входящие в тройку самых дорогих товаров, а также имя сотрудника, 
 который осуществлял упаковку заказов (PackedByPersonID).
 */
 
-TODO: напишите здесь свое решение
+
 
 -- ---------------------------------------------------------------------------
 -- Опциональное задание
