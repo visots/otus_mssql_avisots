@@ -59,23 +59,18 @@ WHERE p.IsSalesperson = 1 and i.SalespersonPersonID IS NULL
 */
 SELECT [StockItemId], 
 	   [StockItemName],
-	   (SELECT MIN(UnitPrice) FROM [Warehouse].[StockItems])
-FROM [Warehouse].[StockItems]
+	   [UnitPrice]
+FROM [Warehouse].[StockItems] s 
+JOIN ( select Min(UnitPrice) as  MinPrice from [Warehouse].[StockItems]) m on s.UnitPrice = m.MinPrice
 
 SELECT [StockItemId], 
 	   [StockItemName],
 	   [UnitPrice]
 FROM [Warehouse].[StockItems] 
-WHERE StockItemID IN ( 
-						SELECT [StockItemId] 
-						FROM [Warehouse].[StockItems] 
-						GROUP BY [StockItemId]
-						HAVING MIN(UnitPrice) IS NOT NULL)
-
-
---Проверка 
---SELECT [StockItemId],[StockItemName],MIN(UnitPrice)FROM [Warehouse].[StockItems]
---GROUP BY [StockItemId],[StockItemName]
+WHERE UnitPrice = ( 
+						SELECT MIN(UnitPrice)
+						FROM [Warehouse].[StockItems]
+					 )
 
 /*
 3. Выберите информацию по клиентам, которые перевели компании пять максимальных платежей 
