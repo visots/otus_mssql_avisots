@@ -38,7 +38,28 @@ USE WideWorldImporters
 Нарастающий итог должен быть без оконной функции.
 */
 
-напишите здесь свое решение
+-- в сумме по месяцам
+select datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1), sum(ExtendedPrice)
+from [Sales].[Invoices] i
+join [Sales].[InvoiceLines] il on il.InvoiceID = i.InvoiceID
+group by datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1)
+order by 1 asc
+
+Select distinct
+i.InvoiceDate,
+( 
+	select sum(il.ExtendedPrice)
+	from [Sales].[Invoices] i1
+	join [Sales].[InvoiceLines] il on il.InvoiceID = i1.InvoiceID
+	where year(i1.InvoiceDate) = year(i.InvoiceDate) and month(i1.invoiceDate) <= MONTH(i.InvoiceDate)
+) as CumulativePrice
+from [Sales].[Invoices] i
+order by i.InvoiceDate asc
+
+--проверка
+--		2013-01		2013-02		2013-03
+--print 3193304.60 + 4335972.97 + 4451081.62	--11980359.19
+
 
 /*
 2. Сделайте расчет суммы нарастающим итогом в предыдущем запросе с помощью оконной функции.
