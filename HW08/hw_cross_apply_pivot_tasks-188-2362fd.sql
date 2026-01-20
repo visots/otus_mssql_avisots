@@ -39,7 +39,47 @@ InvoiceMonth | Peeples Valley, AZ | Medicine Lodge, KS | Gasport, NY | Sylvanite
 -------------+--------------------+--------------------+-------------+--------------+------------
 */
 
-напишите здесь свое решение
+select distinct CustomerName
+from [Sales].[Customers]
+where customerId between 2 and 6 
+
+select 
+count(InvoiceId),
+invoiceDate,
+CustomerName
+from (
+		select 
+			   i.InvoiceId,
+		       format(i.InvoiceDate,'01.MM.yyyy') as InvoiceDate,
+			   replace(replace(c.CustomerName,'Tailspin Toys (',''),')','') as CustomerName
+		from [Sales].[Customers] as c
+		JOIN [Sales].[Invoices] as i on i.CustomerID=c.CustomerID
+		where c.customerId between 2 and 6
+	) as s
+group by InvoiceDate, CustomerName
+
+--Решение:
+select 
+InvoiceDate as InvoiceMonth,
+[Sylvanite, MT],
+[Peeples Valley, AZ],
+[Medicine Lodge, KS],
+[Gasport, NY],
+[Jessie, ND]
+from (
+		select 
+			   i.InvoiceId,
+		       format(i.InvoiceDate,'01.MM.yyyy') as InvoiceDate,
+			   replace(replace(c.CustomerName,'Tailspin Toys (',''),')','') as CustomerName
+		from [Sales].[Customers] as c
+		JOIN [Sales].[Invoices] as i on i.CustomerID=c.CustomerID
+		where c.customerId between 2 and 6
+	) as s
+pivot (
+	   count(s.InvoiceId) for s.CustomerName in ([Sylvanite, MT],[Peeples Valley, AZ],[Medicine Lodge, KS],[Gasport, NY],[Jessie, ND])) p
+order by InvoiceMonth
+
+
 
 /*
 2. Для всех клиентов с именем, в котором есть "Tailspin Toys"
