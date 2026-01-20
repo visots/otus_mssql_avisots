@@ -124,8 +124,10 @@ ORDER BY i.InvoiceDate;
 */
 
 напишите здесь свое решение
-select * from [Sales].[OrderLines]
+select * from [Sales].[OrderLines] 
 select * from [Sales].[Orders]
+
+select 
 
 /*
 4. Функции одним запросом
