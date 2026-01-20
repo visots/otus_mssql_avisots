@@ -133,39 +133,22 @@ cross apply (
 В результатах должно быть ид клиета, его название, ид товара, цена, дата покупки.
 */
 
---select 
---	c.CustomerId, 
---	c.CustomerName,
---	ill.Description as ProductName,
---	ill.StockItemID,
---	ill.UnitPrice,
---	i.InvoiceDate
---from [Sales].[Customers] c
---join [Sales].[Invoices] i on i.CustomerID = c.CustomerID
---cross apply (
---				select top 2 * 
---				from [Sales].[InvoiceLines] il
---				where i.InvoiceID = il.InvoiceId
---				order by il.UnitPrice desc
---			) as ill
---order by c.CustomerID
-
---select 
---	c.CustomerId, 
---	c.CustomerName,
---	ill.Description as ProductName,
---	ill.StockItemID,
---	ill.UnitPrice,
---	ill.InvoiceDate
---from [Sales].[Customers] c
---cross apply (
---				select top 2 il.Description,il.StockItemID,il.UnitPrice,i.InvoiceDate
---				from  [Sales].[Invoices] i
---				join [Sales].[InvoiceLines] il on i.InvoiceID = il.InvoiceID
---				where i.CustomerID = i.CustomerID
---				order by il.UnitPrice desc
---			) as ill
---order by c.CustomerID
+select 
+	c.CustomerId, 
+	c.CustomerName,
+	ill.Description as ProductName,
+	ill.StockItemID,
+	ill.UnitPrice,
+	ill.InvoiceDate
+from [Sales].[Customers] c
+cross apply (
+				select top 2 il.Description,il.StockItemID,il.UnitPrice,i.InvoiceDate
+				from  [Sales].[Invoices] i
+				join [Sales].[InvoiceLines] il on i.InvoiceID = il.InvoiceID
+				where i.CustomerID = c.CustomerID
+				order by il.UnitPrice desc
+			) as ill
+order by c.CustomerID asc
 
 select 
     CustomerID,
