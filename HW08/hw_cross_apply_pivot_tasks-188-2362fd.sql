@@ -120,11 +120,74 @@ CountryId | CountryName | Code
 ----------+-------------+-------
 */
 
-напишите здесь свое решение
+select * from [Application].[Countries]
+
+select CountryId, CountryName, a.Code 
+from Application.Countries
+cross apply (
+				values (IsoAlpha3Code), (cast(IsoNumericCode as varchar (5)))
+				) as a (Code)
 
 /*
 4. Выберите по каждому клиенту два самых дорогих товара, которые он покупал.
 В результатах должно быть ид клиета, его название, ид товара, цена, дата покупки.
 */
 
-напишите здесь свое решение
+--select 
+--	c.CustomerId, 
+--	c.CustomerName,
+--	ill.Description as ProductName,
+--	ill.StockItemID,
+--	ill.UnitPrice,
+--	i.InvoiceDate
+--from [Sales].[Customers] c
+--join [Sales].[Invoices] i on i.CustomerID = c.CustomerID
+--cross apply (
+--				select top 2 * 
+--				from [Sales].[InvoiceLines] il
+--				where i.InvoiceID = il.InvoiceId
+--				order by il.UnitPrice desc
+--			) as ill
+--order by c.CustomerID
+
+--select 
+--	c.CustomerId, 
+--	c.CustomerName,
+--	ill.Description as ProductName,
+--	ill.StockItemID,
+--	ill.UnitPrice,
+--	ill.InvoiceDate
+--from [Sales].[Customers] c
+--cross apply (
+--				select top 2 il.Description,il.StockItemID,il.UnitPrice,i.InvoiceDate
+--				from  [Sales].[Invoices] i
+--				join [Sales].[InvoiceLines] il on i.InvoiceID = il.InvoiceID
+--				where i.CustomerID = i.CustomerID
+--				order by il.UnitPrice desc
+--			) as ill
+--order by c.CustomerID
+
+select 
+    CustomerID,
+    CustomerName,
+    StockItemID,
+    ProductName,
+    UnitPrice,
+    InvoiceDate
+from (
+    select
+        c.CustomerID,
+        c.CustomerName,
+        il.StockItemID,
+        il.Description as ProductName,
+        il.UnitPrice,
+        i.InvoiceDate,
+        row_number() over( partition by c.CustomerID
+            order by il.UnitPrice desc
+        ) AS rn
+    from Sales.Customers c
+    join Sales.Invoices as i on i.CustomerID = c.CustomerID
+    join Sales.InvoiceLines as il on il.InvoiceID = i.InvoiceID
+) t
+where rn <= 2
+order by CustomerID, UnitPrice desc;
