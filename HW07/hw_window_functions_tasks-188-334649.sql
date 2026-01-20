@@ -19,6 +19,8 @@ https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importer
 -- ---------------------------------------------------------------------------
 
 USE WideWorldImporters
+
+set statistics time, io on
 /*
 1. Сделать расчет суммы продаж нарастающим итогом по месяцам с 2015 года 
 (в рамках одного месяца он будет одинаковый, нарастать будет в течение времени выборки).
@@ -39,26 +41,40 @@ USE WideWorldImporters
 */
 
 -- в сумме по месяцам
-select datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1), sum(ExtendedPrice)
-from [Sales].[Invoices] i
-join [Sales].[InvoiceLines] il on il.InvoiceID = i.InvoiceID
-group by datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1)
-order by 1 asc
+--select datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1), sum(ExtendedPrice)
+--from [Sales].[Invoices] i
+--join [Sales].[InvoiceLines] il on il.InvoiceID = i.InvoiceID
+--group by datefromparts(year(i.InvoiceDate), month(i.InvoiceDate),1)
+--order by 1 asc
 
-Select distinct
-i.InvoiceDate,
-( 
-	select sum(il.ExtendedPrice)
-	from [Sales].[Invoices] i1
-	join [Sales].[InvoiceLines] il on il.InvoiceID = i1.InvoiceID
-	where year(i1.InvoiceDate) = year(i.InvoiceDate) and month(i1.invoiceDate) <= MONTH(i.InvoiceDate)
-) as CumulativePrice
-from [Sales].[Invoices] i
-order by i.InvoiceDate asc
+SELECT
+    i.InvoiceID,
+    c.CustomerName,
+    i.InvoiceDate,
+    SUM(il.ExtendedPrice) AS InvoiceAmount,
 
---проверка
---		2013-01		2013-02		2013-03
---print 3193304.60 + 4335972.97 + 4451081.62	--11980359.19
+    (
+        SELECT SUM(il2.ExtendedPrice)
+        FROM Sales.Invoices i2
+        JOIN Sales.InvoiceLines il2 ON il2.InvoiceID = i2.InvoiceID
+        WHERE
+            i2.InvoiceDate >= '2015-01-01'
+            AND DATEFROMPARTS(YEAR(i2.InvoiceDate), MONTH(i2.InvoiceDate), 1)
+                <= DATEFROMPARTS(YEAR(i.InvoiceDate), MONTH(i.InvoiceDate), 1)
+    ) AS CumulativeMonthlyAmount
+
+FROM Sales.Invoices i
+JOIN Sales.InvoiceLines il ON il.InvoiceID = i.InvoiceID
+JOIN Sales.Customers c ON c.CustomerID = i.CustomerID
+WHERE i.InvoiceDate >= '2015-01-01'
+GROUP BY
+    i.InvoiceID,
+    c.CustomerName,
+    i.InvoiceDate
+ORDER BY i.InvoiceDate;
+
+-- SQL Server Execution Times:
+-- CPU time = 40109 ms,  elapsed time = 41325 ms.
 
 
 /*
@@ -66,7 +82,41 @@ order by i.InvoiceDate asc
    Сравните производительность запросов 1 и 2 с помощью set statistics time, io on
 */
 
-напишите здесь свое решение
+SELECT
+    i.InvoiceID,
+    c.CustomerName,
+    i.InvoiceDate,
+    SUM(il.ExtendedPrice) AS InvoiceAmount,
+    m.CumulativeMonthlyAmount
+FROM Sales.Invoices i
+JOIN Sales.InvoiceLines il ON il.InvoiceID = i.InvoiceID
+JOIN Sales.Customers c ON c.CustomerID = i.CustomerID
+JOIN (
+    SELECT
+        DATEFROMPARTS(YEAR(InvoiceDate), MONTH(InvoiceDate), 1) AS MonthDate,
+        SUM(SUM(il.ExtendedPrice)) OVER (
+            ORDER BY DATEFROMPARTS(YEAR(InvoiceDate), MONTH(InvoiceDate), 1)
+            ROWS UNBOUNDED PRECEDING
+        ) AS CumulativeMonthlyAmount
+    FROM Sales.Invoices i
+    JOIN Sales.InvoiceLines il ON il.InvoiceID = i.InvoiceID
+    WHERE i.InvoiceDate >= '2015-01-01'
+    GROUP BY
+        YEAR(InvoiceDate),
+        MONTH(InvoiceDate)
+) m
+    ON m.MonthDate = DATEFROMPARTS(YEAR(i.InvoiceDate), MONTH(i.InvoiceDate), 1)
+WHERE i.InvoiceDate >= '2015-01-01'
+GROUP BY
+    i.InvoiceID,
+    c.CustomerName,
+    i.InvoiceDate,
+    m.CumulativeMonthlyAmount
+ORDER BY i.InvoiceDate;
+
+
+ --SQL Server Execution Times:
+ --CPU time = 687 ms,  elapsed time = 1577 ms.
 
 /*
 3. Вывести список 2х самых популярных продуктов (по количеству проданных) 
@@ -74,6 +124,8 @@ order by i.InvoiceDate asc
 */
 
 напишите здесь свое решение
+select * from [Sales].[OrderLines]
+select * from [Sales].[Orders]
 
 /*
 4. Функции одним запросом
