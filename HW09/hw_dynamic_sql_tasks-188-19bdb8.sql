@@ -41,5 +41,32 @@ InvoiceMonth | Aakriti Byrraju    | Abel Spirlea       | Abel Tatarescu | ... (�
 -------------+--------------------+--------------------+----------------+----------------------
 */
 
+declare @columns nvarchar(max), 
+		@query NVARCHAR(max);
 
-напишите здесь свое решение
+select @columns = string_agg(convert(nvarchar(max), quotename(CustomerName)), ',') within group(order by CustomerName)
+from [Sales].[Customers] c
+where exists( select 1 from [sales].[invoices] i
+			  where c.CustomerID=i.CustomerID)
+
+select @columns --print однако обрезает строку...
+
+set @query = 
+'select 
+format(InvoiceDate,''dd.MM.yyyy'') as InvoiceMonth,'+@columns+'
+from (
+		select 
+			   i.InvoiceId,
+		       datefromparts(year(i.InvoiceDate),month(i.InvoiceDate),1) as InvoiceDate,
+			   c.CustomerName as CustomerName
+		from [Sales].[Customers] as c
+		JOIN [Sales].[Invoices] as i on i.CustomerID=c.CustomerID
+	) as s
+pivot (
+	   count(s.InvoiceId) for s.CustomerName in ('+@columns+')) p
+order by InvoiceMonth ASC'
+
+
+PRINT @query;
+
+EXEC(@query);
