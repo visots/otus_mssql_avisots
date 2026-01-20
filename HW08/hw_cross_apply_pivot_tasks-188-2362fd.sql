@@ -83,7 +83,7 @@ order by InvoiceMonth ASC
 
 /*
 2. Для всех клиентов с именем, в котором есть "Tailspin Toys"
-вывести все адреса, которые есть в таблице, в одной колонке.
+вывести все ПОЛЯ С ЗНАЧЕНИЯМИ адреса, которые есть в таблице, в одной колонке.
 
 Пример результата:
 ----------------------------+--------------------
@@ -96,7 +96,13 @@ Tailspin Toys (Head Office) | Ribeiroville
 ----------------------------+--------------------
 */
 
-напишите здесь свое решение
+
+select CustomerName, a.AddressLine from [Sales].[Customers] as c
+	cross apply (
+					values (DeliveryAddressLine1),(DeliveryAddressLine2), (PostalAddressLine1),(PostalAddressLine2)
+				 ) as a (AddressLine)
+where a.AddressLine is not null and CustomerName like 'Tailspin Toys%'
+
 
 /*
 3. В таблице стран (Application.Countries) есть поля с цифровым кодом страны и с буквенным.
