@@ -60,7 +60,7 @@ group by InvoiceDate, CustomerName
 
 --Решение:
 select 
-InvoiceDate as InvoiceMonth,
+format(InvoiceDate,'dd.MM.yyyy') as InvoiceMonth,
 [Sylvanite, MT],
 [Peeples Valley, AZ],
 [Medicine Lodge, KS],
@@ -69,7 +69,7 @@ InvoiceDate as InvoiceMonth,
 from (
 		select 
 			   i.InvoiceId,
-		       format(i.InvoiceDate,'01.MM.yyyy') as InvoiceDate,
+		       datefromparts(year(i.InvoiceDate),month(i.InvoiceDate),1) as InvoiceDate,
 			   replace(replace(c.CustomerName,'Tailspin Toys (',''),')','') as CustomerName
 		from [Sales].[Customers] as c
 		JOIN [Sales].[Invoices] as i on i.CustomerID=c.CustomerID
@@ -77,7 +77,7 @@ from (
 	) as s
 pivot (
 	   count(s.InvoiceId) for s.CustomerName in ([Sylvanite, MT],[Peeples Valley, AZ],[Medicine Lodge, KS],[Gasport, NY],[Jessie, ND])) p
-order by InvoiceMonth
+order by InvoiceMonth ASC
 
 
 
