@@ -41,8 +41,72 @@ USE WideWorldImporters
 Сделать два варианта: с помощью OPENXML и через XQuery.
 */
 
-напишите здесь свое решение
+DECLARE @xml XML;
 
+SELECT @xml = BulkColumn
+FROM OPENROWSET(BULK 'C:\Users\avisots\source\repos\otus_mssql_avisots\HW09\StockItems.xml', SINGLE_CLOB) as t
+
+declare @temp table 
+(
+	[StockItemName] nvarchar(300)  , 
+	[SupplierId] int ,
+	[UnitPackageId] int,
+	[OuterPackageID] int,
+	QuantityPerOuter int,
+	TypicalWeightPerUnit float,
+	LeadTimeDays int,
+	IsChillerStock bit,
+	TaxRate float,
+	UnitPrice float 
+)
+
+DECLARE @docHandle INT;
+EXEC sp_xml_preparedocument @docHandle OUTPUT, @xml;
+
+insert into  @temp
+SELECT *
+FROM OPENXML(@docHandle, N'/StockItems/Item')
+WITH ( 
+	[StockItemName] nvarchar(300)  '@Name', 
+	[SupplierId] int 'SupplierID',
+	[UnitPackageId] int 'Package/UnitPackageID',
+	[OuterPackageID] int 'Package/OuterPackageID',
+	QuantityPerOuter int 'Package/QuantityPerOuter',
+	TypicalWeightPerUnit float 'Package/TypicalWeightPerUnit',
+	LeadTimeDays int 'LeadTimeDays',
+	IsChillerStock bit 'IsChillerStock',
+	TaxRate float 'TaxRate',
+	UnitPrice float 'UnitPrice' 
+
+	)
+
+select * from @temp
+
+select * from Warehouse.StockItems
+
+merge Warehouse.StockItems as target
+using @temp as source on source.[StockItemName] = target.[StockItemName]
+when not matched by target then 
+								insert (StockItemName, SupplierID, UnitPackageID, OuterPackageID, QuantityPerOuter, 
+										TypicalWeightPerUnit, LeadTimeDays, IsChillerStock, TaxRate, UnitPrice,LastEditedBy)
+								values (source.StockItemName, source.SupplierID, source.UnitPackageID, source.OuterPackageID, 
+										source.QuantityPerOuter, source.TypicalWeightPerUnit, source.LeadTimeDays, source.IsChillerStock, 
+										source.TaxRate, source.UnitPrice, 1)
+when matched then update set target.StockItemName = source.StockItemName,
+							 target.SupplierID=source.SupplierID
+							,target.UnitPackageId =source.UnitPackageId 
+							,target.OuterPackageID=source.OuterPackageID
+							,target.QuantityPerOuter =source.QuantityPerOuter
+							,target.TypicalWeightPerUnit =source.TypicalWeightPerUnit
+							,target.LeadTimeDays =source.LeadTimeDays
+							,target.IsChillerStock=source.IsChillerStock
+							,target.TaxRate =source.TaxRate
+							,target.UnitPrice =source.UnitPrice
+output $action, deleted.*, inserted.*
+;
+
+
+return;
 /*
 2. Выгрузить данные из таблицы StockItems в такой же xml-файл, как StockItems.xml
 */
