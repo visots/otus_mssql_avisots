@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="books.xslt"?>
+<books>
+  <book>
+    <title>Властелин колец</title>
+    <author>Дж. Р. Р. Толкиен</author>
+    <price>500</price>
+  </book>
+  <book>
+    <title>Гарри Поттер и Философский камень</title>
+    <author>Дж. К. Роулинг</author>
+    <price>400</price>
+  </book>
+</books>
+
