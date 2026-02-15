@@ -129,7 +129,21 @@ return;
 2. Выгрузить данные из таблицы StockItems в такой же xml-файл, как StockItems.xml
 */
 
---напишите здесь свое решение
+select top 5 * from Warehouse.StockItems
+
+select
+	StockItemName as [Item/@Name], 
+	SupplierID as [Item/SupplierId],
+	UnitPackageID as [Item/Package/UnitPackageID],
+	OuterPackageID as [Item/Package/OuterPackageID],
+	QuantityPerOuter as [Item/Package/QuantityPerOuter],
+	TypicalWeightPerUnit as [Item/Package/TypicalWeightPerUnit],
+	LeadTimeDays as [Item/LeadTimeDays],
+	IsChillerStock as [Item/IsChillerStock],
+	TaxRate as [Item/TaxRate],
+	UnitPrice as [Item/UnitPrice]
+from Warehouse.StockItems
+FOR XML PATH(''),ROOT('StockItems')
 
 
 /*
@@ -141,7 +155,14 @@ return;
 - FirstTag (из поля CustomFields, первое значение из массива Tags)
 */
 
---напишите здесь свое решение
+select top 5 * from Warehouse.StockItems
+
+select 
+	StockItemId,
+	StockItemName,
+	json_value(CustomFields,'$.CountryOfManufacture') as CountryOfManufacture,
+	json_value(CustomFields,'$.Tags[0]') as CountryOfManufacture
+from Warehouse.StockItems
 
 /*
 4. Найти в StockItems строки, где есть тэг "Vintage".
@@ -163,4 +184,30 @@ return;
 */
 
 
---напишите здесь свое решение
+select 
+	StockItemId,
+	StockItemName,
+	Tags
+from Warehouse.StockItems s
+cross apply openjson(CustomFields, '$.Tags') as Tags
+where Tags.value = 'Vintage'
+
+--Развернутый массив Tags
+;with FilteredItems as (
+    select *
+    from Warehouse.StockItems s
+    where exists (
+        select 1
+        from openjson(s.CustomFields, '$.Tags')
+        where value = 'Vintage'
+    )
+)
+select 
+    f.StockItemId,
+    f.StockItemName,
+    string_agg(t.value, ', ') as Tags
+from FilteredItems f
+cross apply openjson(f.CustomFields, '$.Tags') t
+group by 
+    f.StockItemId,
+    f.StockItemName
