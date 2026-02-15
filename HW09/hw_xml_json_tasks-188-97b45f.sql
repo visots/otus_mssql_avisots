@@ -41,6 +41,7 @@ USE WideWorldImporters
 Сделать два варианта: с помощью OPENXML и через XQuery.
 */
 
+-------OPENXML:
 DECLARE @xml XML;
 
 SELECT @xml = BulkColumn
@@ -60,10 +61,11 @@ declare @temp table
 	UnitPrice float 
 )
 
+
 DECLARE @docHandle INT;
 EXEC sp_xml_preparedocument @docHandle OUTPUT, @xml;
 
-insert into  @temp
+insert into @temp
 SELECT *
 FROM OPENXML(@docHandle, N'/StockItems/Item')
 WITH ( 
@@ -77,8 +79,22 @@ WITH (
 	IsChillerStock bit 'IsChillerStock',
 	TaxRate float 'TaxRate',
 	UnitPrice float 'UnitPrice' 
+)
 
-	)
+------XQuery:
+--insert into @temp
+--select 
+-- i.value('(@Name)[1]','nvarchar (300)') as StockItemName,
+-- i.value('(SupplierID)[1]','int') as SupplierId,
+-- i.value('(Package/UnitPackageID)[1]','int') as UnitPackageId,
+-- i.value('(Package/OuterPackageID)[1]','int') as OuterPackageID,
+-- i.value('(Package/QuantityPerOuter)[1]','int') as QuantityPerOuter,
+-- i.value('(Package/TypicalWeightPerUnit)[1]','float') as TypicalWeightPerUnit,
+-- i.value('(LeadTimeDays)[1]','int') as LeadTimeDays,
+-- i.value('(IsChillerStock)[1]','bit') as IsChillerStock,
+-- i.value('(TaxRate)[1]','float') as TaxRate,
+-- i.value('(UnitPrice)[1]','float') as UnitPrice
+--from @xml.nodes('/StockItems/Item') as x(i)
 
 select * from @temp
 
@@ -106,12 +122,14 @@ output $action, deleted.*, inserted.*
 ;
 
 
+
+
 return;
 /*
 2. Выгрузить данные из таблицы StockItems в такой же xml-файл, как StockItems.xml
 */
 
-напишите здесь свое решение
+--напишите здесь свое решение
 
 
 /*
@@ -123,7 +141,7 @@ return;
 - FirstTag (из поля CustomFields, первое значение из массива Tags)
 */
 
-напишите здесь свое решение
+--напишите здесь свое решение
 
 /*
 4. Найти в StockItems строки, где есть тэг "Vintage".
@@ -145,4 +163,4 @@ return;
 */
 
 
-напишите здесь свое решение
+--напишите здесь свое решение
