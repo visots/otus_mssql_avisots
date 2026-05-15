@@ -1,12 +1,79 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\hw_xml_json_tasks-188-97b45f.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HW09\\hw_xml_json_tasks-188-97b45f.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\StockItems.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HW09\\StockItems.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\04-xml_data_type.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HW09\\04-xml_data_type.sql||{B5A506EB-11BE-4782-9A18-21265C2CA0B4}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 261,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "hw_xml_json_tasks-188-97b45f.sql - prod.WideWorldImporters (DESKTOP-0H0RL67\\avisots (51))",
+              "DocumentMoniker": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\hw_xml_json_tasks-188-97b45f.sql",
+              "RelativeDocumentMoniker": "HW09\\hw_xml_json_tasks-188-97b45f.sql",
+              "ToolTip": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\hw_xml_json_tasks-188-97b45f.sql - prod.WideWorldImporters (DESKTOP-0H0RL67\\avisots (51))",
+              "RelativeToolTip": "HW09\\hw_xml_json_tasks-188-97b45f.sql - prod.WideWorldImporters (DESKTOP-0H0RL67\\avisots (51))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-02-15T09:00:00.511Z",
+              "EditorCaption": " - prod.WideWorldImporters (DESKTOP-0H0RL67\\avisots (51))"
+            }
+          ]
+        },
+        {
+          "DockedWidth": 261,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "StockItems.xml",
+              "DocumentMoniker": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\StockItems.xml",
+              "RelativeDocumentMoniker": "HW09\\StockItems.xml",
+              "ToolTip": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\StockItems.xml",
+              "RelativeToolTip": "HW09\\StockItems.xml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
+              "WhenOpened": "2026-02-15T09:08:03.432Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "04-xml_data_type.sql - prod.SSAS (DESKTOP-0H0RL67\\avisots (52))",
+              "DocumentMoniker": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\04-xml_data_type.sql",
+              "RelativeDocumentMoniker": "HW09\\04-xml_data_type.sql",
+              "ToolTip": "C:\\Users\\avisots\\source\\repos\\otus_mssql_avisots\\HW09\\04-xml_data_type.sql - prod.SSAS (DESKTOP-0H0RL67\\avisots (52))",
+              "RelativeToolTip": "HW09\\04-xml_data_type.sql - prod.SSAS (DESKTOP-0H0RL67\\avisots (52))",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2026-02-15T09:00:44.367Z",
+              "EditorCaption": " - prod.SSAS (DESKTOP-0H0RL67\\avisots (52))"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
