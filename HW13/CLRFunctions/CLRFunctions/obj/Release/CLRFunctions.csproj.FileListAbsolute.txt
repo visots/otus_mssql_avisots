@@ -1,0 +1,6 @@
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\bin\Release\CLRFunctions.dll
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\bin\Release\CLRFunctions.pdb
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\obj\Release\CLRFunctions.csproj.AssemblyReference.cache
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\obj\Release\CLRFunctions.csproj.CoreCompileInputs.cache
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\obj\Release\CLRFunctions.dll
+C:\Users\avisots\source\repos\CLRFunctions\CLRFunctions\obj\Release\CLRFunctions.pdb
